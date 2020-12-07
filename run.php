@@ -47,7 +47,7 @@ for ($a = 0;$a < $jumlah;$a++)
     }
 	elseif ($cek['error']==1)
     {
-        echo "\033[1;33mUncheck contact Paman\033[0m\n";
+        echo "\033[1;31mDeclined\033[0m\n";
     }
     else
     {
